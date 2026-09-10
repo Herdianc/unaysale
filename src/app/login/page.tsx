@@ -61,7 +61,6 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={!csrfToken}
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90 w-full disabled:opacity-50"
           >
             Masuk
