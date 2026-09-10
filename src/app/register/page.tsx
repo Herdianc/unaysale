@@ -61,8 +61,17 @@ export default function RegisterPage() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        setGeneralError(data.message || "Gagal mendaftar. Silakan coba lagi.");
+        const data = await res.json().catch(() => ({}));
+        const msg = data.error || data.message || "";
+        const details = data.details ? ` (${data.details})` : "";
+        if (res.status === 409) {
+          setGeneralError("Email sudah terdaftar. Gunakan email lain atau Masuk.");
+          setErrors((prev) => ({ ...prev, email: "Email sudah terdaftar" }));
+        } else if (msg.toLowerCase().includes("validation")) {
+          setGeneralError(details || "Cek lagi form: " + (msg || "data tidak valid"));
+        } else {
+          setGeneralError((msg + details) || "Gagal mendaftar. Silakan coba lagi.");
+        }
         return;
       }
 
@@ -154,7 +163,7 @@ export default function RegisterPage() {
               id="password"
               name="password"
               type="password"
-              placeholder="Minimal 8 karakter"
+              placeholder="Min 8, ada huruf besar & angka (contoh: Fathan123)"
               value={form.password}
               onChange={handleChange}
             />
