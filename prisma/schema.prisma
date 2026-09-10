@@ -365,3 +365,13 @@ model Notification {
   @@index([userId])
   @@index([isRead])
 }
+
+model SiteSetting {
+  id          String   @id @default("site")
+  siteName    String   @default("UNAYSALE")
+  email       String   @default("info@unaysale.co.id")
+  phone       String   @default("+62 21 1234 56789")
+  address     String   @default("Jl. Sudirman No. 123, Jakarta Selatan, DKI Jakarta 12190")
+  description String?  @default("Marketplace properti terpercaya di Indonesia.")
+  updatedAt   DateTime @updatedAt
+}

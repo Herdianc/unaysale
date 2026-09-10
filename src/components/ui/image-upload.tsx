@@ -32,7 +32,7 @@ function ImageUpload({
   onChange,
   primaryIndex = 0,
   onPrimaryIndexChange,
-  maxFiles = 10,
+  maxFiles = 5,
   accept = "image/*",
   className,
   label,

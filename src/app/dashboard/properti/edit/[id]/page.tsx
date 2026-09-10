@@ -194,6 +194,10 @@ export default function EditPropertiPage() {
   const addImageUrl = () => {
     const url = newImageUrl.trim();
     if (!url) return;
+    if (form.imageUrls.length >= 5) {
+      setError("Maksimal 5 foto per properti");
+      return;
+    }
     if (form.imageUrls.includes(url)) {
       setError("URL foto sudah ditambahkan");
       return;

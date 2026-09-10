@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { mkdir, writeFile } from "fs/promises"
 import path from "path"
+import { put } from "@vercel/blob"
 import { auth } from "@/lib/auth"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"]
@@ -11,6 +12,10 @@ export async function POST(request: Request) {
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+    }
+    const role = (session.user as { role?: string }).role
+    if (role !== "AGENT" && role !== "ADMIN" && role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Hanya Agen dan Admin yang bisa upload gambar" }, { status: 403 })
     }
 
     const formData = await request.formData()
@@ -35,6 +40,18 @@ export async function POST(request: Request) {
     const ext = file.type === "image/jpeg" ? ".jpg" : `.${file.type.split("/")[1]}`
     const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`
 
+    // Vercel production: simpan permanen di Vercel Blob (tidak hilang saat redeploy).
+    // Aktifkan dengan ENV BLOB_READ_WRITE_TOKEN (Vercel Dashboard -> Storage -> Create Blob Store).
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+    if (blobToken) {
+      const blob = await put(`uploads/${safeName}`, file, {
+        access: "public",
+        token: blobToken,
+      })
+      return NextResponse.json({ url: blob.url }, { status: 201 })
+    }
+
+    // Lokal / fallback: simpan di public/uploads
     const uploadDir = path.join(process.cwd(), "public", "uploads")
     await mkdir(uploadDir, { recursive: true })
 

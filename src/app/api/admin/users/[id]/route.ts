@@ -78,6 +78,17 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     }
 
     const { id } = await params
+    // Cegah hapus diri sendiri
+    if (id === session.user.id) {
+      return NextResponse.json({ error: "Tidak bisa menghapus akun sendiri" }, { status: 400 })
+    }
+
+    // Hapus agen terkait jika ada, lalu soft delete user
+    const existing = await prisma.user.findUnique({ where: { id }, select: { agent: { select: { id: true } } } })
+    if (existing?.agent) {
+      await prisma.property.updateMany({ where: { agentId: existing.agent.id }, data: { agentId: null } })
+      await prisma.agent.delete({ where: { id: existing.agent.id } })
+    }
 
     const user = await prisma.user.update({
       where: { id },
@@ -85,7 +96,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       select: { id: true, name: true, email: true, isActive: true },
     })
 
-    return NextResponse.json(user)
+    return NextResponse.json({ ...user, status: user.isActive ? "ACTIVE" : "INACTIVE" })
   } catch (error) {
     console.error("[ADMIN_USERS_ID_DELETE]", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

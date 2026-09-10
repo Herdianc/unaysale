@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "plus.unsplash.com" },
       { protocol: "https", hostname: "via.placeholder.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
+      // Vercel Blob - penyimpanan permanen upload agen (https://*.public.blob.vercel-storage.com/...)
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
 };

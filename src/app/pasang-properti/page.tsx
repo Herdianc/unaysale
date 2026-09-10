@@ -36,7 +36,7 @@ export default async function PasangPropertiPage() {
       icon: <Camera className="h-6 w-6" />,
       title: "Foto Profesional",
       description:
-        "Unggah hingga 10 foto properti dengan galeri yang menarik dan responsif.",
+        "Unggah hingga 5 foto properti dengan galeri yang menarik dan responsif.",
     },
     {
       icon: <Shield className="h-6 w-6" />,
@@ -96,13 +96,13 @@ export default async function PasangPropertiPage() {
                 Masuk untuk Pasang Properti
               </Button>
             </Link>
-            <Link href="/register">
+            <Link href="/login">
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
               >
-                Daftar Gratis
+                Masuk Akun Agen
               </Button>
             </Link>
           </div>
@@ -167,7 +167,7 @@ export default async function PasangPropertiPage() {
             Siap Memulai?
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto mb-8">
-            Daftar sekarang dan pasang properti pertama Anda secara gratis.
+            Hubungi admin untuk aktivasi akun agen, lalu pasang properti pertama Anda secara gratis.
             Tidak ada biaya tersembunyi.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -177,16 +177,16 @@ export default async function PasangPropertiPage() {
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-              <span>Batas 10 foto per iklan</span>
+              <span>Batas 5 foto per iklan</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               <span>Aktif 30 hari</span>
             </div>
           </div>
-          <Link href="/register">
+          <Link href="/login">
             <Button size="lg">
-              Daftar & Pasang Properti Sekarang
+              Masuk & Pasang Properti Sekarang
             </Button>
           </Link>
         </div>

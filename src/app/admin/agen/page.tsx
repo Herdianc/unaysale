@@ -346,7 +346,7 @@ export default function AgentManagement() {
                   </td>
                 </tr>
               ) : (
-                agents.map((agent) => (
+                agents.map((agent, idx) => { const isBottomRow = idx >= agents.length - 2; return (
                   <tr key={agent.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -413,7 +413,7 @@ export default function AgentManagement() {
                               className="fixed inset-0 z-10"
                               onClick={() => setActionMenuOpen(null)}
                             />
-                            <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-30 py-1 animate-in fade-in slide-in-from-top-1">
+                            <div className={`absolute right-0 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-30 py-1 ${isBottomRow ? 'bottom-full mb-2' : 'mt-2'}`}>
                               <Link
                                 href={`/agen/${agent.id}`}
                                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -468,7 +468,7 @@ export default function AgentManagement() {
                       </div>
                     </td>
                   </tr>
-                ))
+                );})
               )}
             </tbody>
           </table>

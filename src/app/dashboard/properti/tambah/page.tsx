@@ -171,8 +171,8 @@ export default function TambahPropertiPage() {
     setError("");
     try {
       for (const file of Array.from(files)) {
-        if (form.imageUrls.length >= 20) {
-          setError("Maksimal 20 foto");
+        if (form.imageUrls.length >= 5) {
+          setError("Maksimal 5 foto per properti");
           break;
         }
         const fd = new FormData();
@@ -201,6 +201,10 @@ export default function TambahPropertiPage() {
   const addImageUrl = () => {
     const url = newImageUrl.trim();
     if (!url) return;
+    if (form.imageUrls.length >= 5) {
+      setError("Maksimal 5 foto per properti");
+      return;
+    }
     if (form.imageUrls.includes(url)) {
       setError("URL foto sudah ditambahkan");
       return;

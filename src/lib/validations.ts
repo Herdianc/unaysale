@@ -48,7 +48,7 @@ export const propertyCreateSchema = z.object({
   imageUrls: z
     .array(z.string().min(1).max(2048))
     .min(1, "Minimal 1 gambar")
-    .max(20),
+    .max(5, "Maksimal 5 gambar per properti"),
   primaryImageIndex: z.number().int().min(0).default(0),
 })
 

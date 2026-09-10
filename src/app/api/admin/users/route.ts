@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const role = searchParams.get("role") || ""
     const skip = (page - 1) * limit
 
-    const where: any = {}
+    const where: any = { isActive: true }
     if (search) {
       where.OR = [
         { name: { contains: search, mode: "insensitive" } },
@@ -27,25 +27,29 @@ export async function GET(request: Request) {
       where.role = role
     }
 
-    const [users, total] = await Promise.all([
-      prisma.user.findMany({
-        where,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          isActive: true,
-          createdAt: true,
-          _count: { select: { properties: true, favorites: true } },
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.user.count({ where }),
-    ])
+    const rawUsers = await prisma.user.findMany({
+      where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        image: true,
+        _count: { select: { properties: true, favorites: true } },
+      },
+      skip,
+      take: limit,
+      orderBy: { createdAt: "desc" },
+    })
+    // Map isActive boolean ke status string agar cocok dengan UI pengguna/page.tsx
+    const users = rawUsers.map((u) => ({
+      ...u,
+      status: u.isActive ? "ACTIVE" : "INACTIVE",
+    }))
+    const total = await prisma.user.count({ where })
 
     return NextResponse.json({
       users,

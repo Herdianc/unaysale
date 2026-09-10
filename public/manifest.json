@@ -42,8 +42,8 @@
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Pasang Properti",
-      "url": "/pasang-properti",
+      "name": "Dashboard",
+      "url": "/dashboard",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]

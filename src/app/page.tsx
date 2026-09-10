@@ -59,23 +59,35 @@ export default async function HomePage() {
       }),
       prisma.category.findMany({
         where: { isActive: true },
-        include: { _count: { select: { properties: true } } },
+        include: {
+          _count: {
+            select: {
+              properties: {
+                where: { status: "ACTIVE" },
+              },
+            },
+          },
+        },
         orderBy: { name: "asc" },
       }),
       Promise.all(
         popularCities.map(async (city) => {
-          const district = await prisma.district.findFirst({
+          const cityRecord = await prisma.city.findFirst({
             where: { slug: city.slug },
             select: { id: true },
           })
-          if (!district) return { ...city, count: 0 }
+          if (!cityRecord) return { ...city, count: 0 }
           const count = await prisma.property.count({
-            where: { districtId: district.id, status: "ACTIVE" },
+            where: { district: { cityId: cityRecord.id }, status: "ACTIVE" },
           })
           return { ...city, count }
         })
       ),
     ])
+
+  // Hanya tampilkan yang ada isinya (>0), walaupun cuma 1 tetap tampil
+  const visibleCategories = categories.filter((c) => c._count.properties > 0)
+  const visibleCities = cityPropertyCounts.filter((c) => c.count > 0)
 
   return (
     <main className="flex flex-col">
@@ -119,14 +131,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {categories.length > 0 && (
+      {visibleCategories.length > 0 && (
         <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold text-[#222222] mb-6">
               Jelajahi Berdasarkan Kategori
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {categories.map((cat) => (
+              {visibleCategories.map((cat) => (
                 <Link
                   key={cat.id}
                   href={`/properti?kategori=${cat.slug}`}
@@ -152,13 +164,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className="py-12 bg-[#F7F8FA]">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-[#222222] mb-6">
-            Jelajahi Berdasarkan Lokasi
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {cityPropertyCounts.map((city) => (
+      {visibleCities.length > 0 && (
+        <section className="py-12 bg-[#F7F8FA]">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-[#222222] mb-6">
+              Jelajahi Berdasarkan Lokasi
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {visibleCities.map((city) => (
               <Link
                 key={city.slug}
                 href={`/properti?lokasi=${city.slug}`}
@@ -180,6 +193,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">

@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 export default function LoginPage() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [csrfToken, setCsrfToken] = useState("")
   const [error, setError] = useState(false)
 
@@ -12,6 +16,33 @@ export default function LoginPage() {
     if (sp.get("error") === "1") setError(true)
     fetch("/api/auth/csrf").then(r => r.json()).then(d => setCsrfToken(d.csrfToken)).catch(() => {})
   }, [])
+
+  // Jika sudah login, redirect sesuai role (hindari error Failed to fetch saat sudah auth)
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      const role = (session.user as any).role
+      if (role === "ADMIN" || role === "SUPER_ADMIN") router.replace("/admin")
+      else router.replace("/dashboard")
+    }
+  }, [status, session, router])
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    )
+  }
+
+  if (status === "authenticated") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="text-center">
+          <p className="text-sm text-gray-600">Sudah login sebagai {session?.user?.email} - mengalihkan...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -67,12 +98,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center mt-6 text-sm text-gray-500">
-          Belum punya akun?{" "}
-          <Link href="/register" className="text-primary font-medium hover:underline">
-            Daftar sekarang
-          </Link>
-        </p>
+
       </div>
     </div>
   )

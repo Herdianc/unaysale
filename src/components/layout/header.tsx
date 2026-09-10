@@ -12,14 +12,12 @@ import {
 const navLinks = [
   { href: "/properti/dijual", label: "Dijual" },
   { href: "/properti/disewa", label: "Disewa" },
-  { href: "/agen", label: "Cari Agen" },
 ];
 
 const mobileNavItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/properti", label: "Cari", icon: Search },
   { href: "/favorit", label: "Favorit", icon: Heart },
-  { href: "/pasang-properti", label: "Pasang", icon: PlusCircle },
   { href: "/dashboard", label: "Akun", icon: User },
 ];
 
@@ -27,12 +25,19 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [siteName, setSiteName] = useState("UNAYSALE");
   const pathname = usePathname();
   const { data: session } = useSession();
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+    fetch("/api/settings")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.siteName) setSiteName(d.siteName);
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export default function Header() {
           <div className="flex h-16 items-center justify-between gap-4">
             <Link href="/" className="flex items-center gap-2 shrink-0">
               <Building2 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-primary">UNAYSALE</span>
+              <span className="text-xl font-bold text-primary">{siteName}</span>
             </Link>
 
             <nav className="hidden md:flex items-center gap-1">
@@ -95,13 +100,6 @@ export default function Header() {
             </nav>
 
             <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/pasang-properti"
-                className="inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
-              >
-                <PlusCircle className="h-4 w-4" />
-                Pasang Properti
-              </Link>
 
               {mounted && user ? (
                 <div className="relative" ref={userMenuRef}>
@@ -249,20 +247,15 @@ export default function Header() {
         <div className="border-t border-gray-100 p-4 space-y-3">
           {mounted && user ? (
             <button
-              onClick={() => window.location.href = "/api/auth/signout"}
+              onClick={() => signOut({ callbackUrl: "/" })}
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-300 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
             >
               <LogOut className="h-4 w-4" /> Keluar
             </button>
           ) : (
-            <>
-              <Link href="/pasang-properti" className="flex w-full items-center justify-center rounded-lg border border-primary px-4 py-2.5 text-sm font-medium text-primary hover:bg-primary/10">
-                Pasang Properti
-              </Link>
-              <Link href="/login" className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary/90">
+            <Link href="/login" className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary/90">
                 Masuk
               </Link>
-            </>
           )}
         </div>
       </div>

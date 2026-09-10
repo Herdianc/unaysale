@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   Building2,
@@ -97,6 +98,16 @@ export default function AdminLayout({
   const [expandedMenus, setExpandedMenus] = useState<string[]>(["Properti"]);
   const [user, setUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [siteName, setSiteName] = useState("UNAYSALE");
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.siteName) setSiteName(d.siteName);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -132,8 +143,7 @@ export default function AdminLayout({
   };
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    await signOut({ callbackUrl: "/login" });
   };
 
   if (loading) {
@@ -164,7 +174,7 @@ export default function AdminLayout({
           <Link href="/admin" className="flex items-center gap-2">
             <Building2 className="h-7 w-7 text-blue-400" />
             <span className="text-xl font-bold text-white tracking-tight">
-              UNAYSALE
+              {siteName}
               <span className="text-xs block text-blue-400 font-normal -mt-1">
                 ADMIN PANEL
               </span>
