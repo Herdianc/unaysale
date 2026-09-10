@@ -31,6 +31,19 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
   },
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icon-192.png", sizes: "192x192" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "UNAYSALE",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({

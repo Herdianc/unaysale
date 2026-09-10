@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PWAInstall from "@/components/pwa-install";
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,6 +17,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="min-h-[60vh]">{children}</div>
       <Footer />
+      <PWAInstall />
     </>
   );
 }
