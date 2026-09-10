@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3"
-import { PrismaLibSQL } from "@prisma/adapter-libsql"
+import { PrismaLibSql } from "@prisma/adapter-libsql"
 import bcrypt from "bcryptjs"
 import path from "path"
 
@@ -8,10 +8,10 @@ function getPrismaClient() {
   const tursoUrl = process.env.TURSO_DATABASE_URL
   const tursoToken = process.env.TURSO_AUTH_TOKEN
   if (tursoUrl && tursoToken) {
-    return new PrismaClient({ adapter: new PrismaLibSQL({ url: tursoUrl, authToken: tursoToken }) })
+    return new PrismaClient({ adapter: new PrismaLibSql({ url: tursoUrl, authToken: tursoToken }) })
   }
   if (process.env.DATABASE_URL?.startsWith("libsql://") || process.env.DATABASE_URL?.startsWith("https://")) {
-    return new PrismaClient({ adapter: new PrismaLibSQL({ url: process.env.DATABASE_URL!, authToken: tursoToken }) })
+    return new PrismaClient({ adapter: new PrismaLibSql({ url: process.env.DATABASE_URL!, authToken: tursoToken }) })
   }
   const dbPath = process.env.DATABASE_URL?.startsWith("file:")
     ? process.env.DATABASE_URL.replace("file:", "")
