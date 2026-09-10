@@ -160,6 +160,15 @@ export async function POST(request: Request) {
       )
     }
 
+    // USER hanya bisa view - hanya AGENT/ADMIN/SUPER_ADMIN yang bisa pasang properti
+    const allowedRoles = ["AGENT", "ADMIN", "SUPER_ADMIN"]
+    if (!allowedRoles.includes(session.user.role as string)) {
+      return NextResponse.json(
+        { error: "Hanya Agen yang bisa memasang properti. Hubungi admin untuk upgrade akun menjadi Agen." },
+        { status: 403 }
+      )
+    }
+
     const body = await request.json()
     const data = propertyCreateSchema.parse(body)
 

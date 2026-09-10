@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +13,7 @@ import {
   X,
   Plus,
   Upload,
+  ShieldAlert,
 } from "lucide-react";
 
 interface Category {
@@ -41,6 +43,10 @@ const steps = [
 
 export default function TambahPropertiPage() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const role = (session?.user as any)?.role as string | undefined;
+  const isAgent = role === "AGENT" || role === "ADMIN" || role === "SUPER_ADMIN";
+
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -310,6 +316,30 @@ export default function TambahPropertiPage() {
     const num = val.replace(/\D/g, "");
     setForm((prev) => ({ ...prev, price: num }));
   };
+
+  // USER hanya view - block akses tambah properti
+  if (session && !isAgent) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-xl shadow-sm border border-amber-200 p-8 text-center">
+          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="h-8 w-8 text-amber-600" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900">Akses Terbatas</h2>
+          <p className="text-sm text-gray-600 mt-2">
+            Akun <b>USER</b> hanya bisa melihat properti. Untuk memasang iklan properti, akun harus
+            di-upgrade menjadi <b>Agen</b> oleh Admin.
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            Silakan hubungi admin di halaman Pengguna atau via menu bantuan.
+          </p>
+          <Button className="mt-6" onClick={() => router.push("/dashboard")}>
+            Kembali ke Dashboard
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">

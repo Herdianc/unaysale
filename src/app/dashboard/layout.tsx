@@ -17,12 +17,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const menuItems = [
+const baseMenuItems = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Profil", href: "/dashboard/profil", icon: UserCog },
+];
+
+const agentMenuItems = [
   { label: "Properti Saya", href: "/dashboard/properti", icon: Building2 },
   { label: "Tambah Properti", href: "/dashboard/properti/tambah", icon: PlusCircle },
   { label: "Leads", href: "/dashboard/leads", icon: Users },
-  { label: "Profil", href: "/dashboard/profil", icon: UserCog },
 ];
 
 const adminMenuItems = [
@@ -56,9 +59,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!session) return null;
 
-  const isAdminRole =
-    session.user?.role === "ADMIN" || session.user?.role === "SUPER_ADMIN";
-  const items = isAdminRole ? [...menuItems, ...adminMenuItems] : menuItems;
+  const role = session.user?.role as string
+  const isAdminRole = role === "ADMIN" || role === "SUPER_ADMIN"
+  const isAgentRole = role === "AGENT" || isAdminRole
+
+  // USER: hanya Overview + Profil + info upgrade
+  // AGENT/ADMIN: full menu properti & leads
+  let items = [...baseMenuItems]
+  if (isAgentRole) {
+    // Sisipkan agent menu di antara Overview dan Profil
+    items = [baseMenuItems[0], ...agentMenuItems, baseMenuItems[1]]
+  }
+  if (isAdminRole) {
+    items = [...items, ...adminMenuItems]
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -109,6 +123,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Link>
             );
           })}
+          {role === "USER" && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-xs font-medium text-blue-900">Mode Pengunjung</p>
+              <p className="text-xs text-blue-700 mt-1">
+                Akun USER hanya bisa lihat properti. Hubungi admin untuk upgrade menjadi Agen agar bisa pasang iklan.
+              </p>
+            </div>
+          )}
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
