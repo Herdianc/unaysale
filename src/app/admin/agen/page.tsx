@@ -311,14 +311,11 @@ export default function AgentManagement() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[700px]">
+          <table className="w-full min-w-[600px]">
             <thead>
               <tr className="bg-gray-50">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[180px]">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">
                   Nama
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[140px]">
-                  Perusahaan
                 </th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Verifikasi
@@ -337,13 +334,13 @@ export default function AgentManagement() {
             <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center">
+                  <td colSpan={5} className="px-4 py-12 text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
                   </td>
                 </tr>
               ) : agents.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
                     <UserCheck className="h-12 w-12 mx-auto text-gray-300 mb-2" />
                     Tidak ada agen ditemukan
                   </td>
@@ -363,11 +360,6 @@ export default function AgentManagement() {
                           <p className="text-xs text-gray-500">{agent.email}</p>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-sm text-gray-600">
-                        {agent.company || "-"}
-                      </span>
                     </td>
                     <td className="px-4 py-3">
                       {agent.isVerified ? (
