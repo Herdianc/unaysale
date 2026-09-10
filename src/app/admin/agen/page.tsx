@@ -118,7 +118,7 @@ export default function AgentManagement() {
       setFormError("Email tidak valid");
       return;
     }
-    if (!editingAgent && form.password && form.password.length < 8) {
+    if (form.password && form.password.length > 0 && form.password.length < 8) {
       setFormError("Password minimal 8 karakter");
       return;
     }
@@ -135,7 +135,7 @@ export default function AgentManagement() {
         bio: form.bio,
         isVerified: form.isVerified,
       };
-      if (!editingAgent && form.password) payload.password = form.password;
+      if (form.password && form.password.trim().length > 0) payload.password = form.password;
 
       const res = await fetch(
         editingAgent ? `/api/admin/agents/${editingAgent.id}` : "/api/admin/agents",
@@ -604,22 +604,29 @@ export default function AgentManagement() {
                   />
                 </div>
               </div>
-              {!editingAgent && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Password
-                  </label>
-                  <input
-                    type="text"
-                    value={form.password}
-                    onChange={(e) =>
-                      setForm({ ...form, password: e.target.value })
-                    }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                    placeholder="Kosongkan untuk default: Password123"
-                  />
-                </div>
-              )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {editingAgent ? "Password Baru (reset)" : "Password"}
+                </label>
+                <input
+                  type="text"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  placeholder={
+                    editingAgent
+                      ? "Kosongkan jika tidak ganti, isi untuk reset"
+                      : "Kosongkan untuk default: Password123"
+                  }
+                />
+                {editingAgent && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Isi untuk reset password agen yang lupa
+                  </p>
+                )}
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">

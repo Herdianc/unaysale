@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import bcrypt from "bcryptjs"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
@@ -78,6 +79,12 @@ export async function PATCH(
     if (body.phone !== undefined) {
       userData.phone =
         typeof body.phone === "string" && body.phone.trim() ? body.phone.trim() : null
+    }
+    if (body.password !== undefined && typeof body.password === "string" && body.password.trim().length > 0) {
+      if (body.password.length < 8) {
+        return NextResponse.json({ error: "Password minimal 8 karakter" }, { status: 400 })
+      }
+      userData.password = await bcrypt.hash(body.password, 12)
     }
 
     const updated = await prisma.$transaction(async (tx) => {
