@@ -310,14 +310,14 @@ export default function AgentManagement() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto overflow-y-visible">
+          <table className="w-full min-w-[700px]">
             <thead>
               <tr className="bg-gray-50">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[180px]">
                   Nama
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[140px]">
                   Perusahaan
                 </th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -329,7 +329,7 @@ export default function AgentManagement() {
                 <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Listing
                 </th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[100px] w-[100px]">
                   Aksi
                 </th>
               </tr>
@@ -401,7 +401,7 @@ export default function AgentManagement() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-6 py-3 text-right">
                       <div className="relative inline-block">
                         <button
                           onClick={() =>
@@ -409,7 +409,8 @@ export default function AgentManagement() {
                               actionMenuOpen === agent.id ? null : agent.id
                             )
                           }
-                          className="p-1 rounded-lg hover:bg-gray-100"
+                          className="p-2 rounded-lg hover:bg-gray-100 border border-transparent hover:border-gray-200"
+                          title="Aksi"
                         >
                           <MoreVertical className="h-4 w-4 text-gray-500" />
                         </button>
