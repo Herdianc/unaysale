@@ -310,7 +310,7 @@ export default function AgentManagement() {
           </div>
         </div>
 
-        <div className="overflow-x-auto overflow-y-visible">
+        <div className="overflow-x-auto">
           <table className="w-full min-w-[700px]">
             <thead>
               <tr className="bg-gray-50">
@@ -329,7 +329,7 @@ export default function AgentManagement() {
                 <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Listing
                 </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[100px] w-[100px]">
+                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[100px] w-[100px] sticky right-0 bg-gray-50 shadow-[-4px_0_6px_-4px_rgba(0,0,0,0.08)]">
                   Aksi
                 </th>
               </tr>
@@ -401,7 +401,7 @@ export default function AgentManagement() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-3 text-right">
+                    <td className="px-6 py-3 text-right sticky right-0 bg-white group-hover:bg-gray-50 shadow-[-4px_0_6px_-4px_rgba(0,0,0,0.08)]">
                       <div className="relative inline-block">
                         <button
                           onClick={() =>
@@ -409,10 +409,10 @@ export default function AgentManagement() {
                               actionMenuOpen === agent.id ? null : agent.id
                             )
                           }
-                          className="p-2 rounded-lg hover:bg-gray-100 border border-transparent hover:border-gray-200"
+                          className="p-2 rounded-lg hover:bg-gray-100 border border-gray-200 bg-white shadow-sm"
                           title="Aksi"
                         >
-                          <MoreVertical className="h-4 w-4 text-gray-500" />
+                          <MoreVertical className="h-4 w-4 text-gray-700" />
                         </button>
 
                         {actionMenuOpen === agent.id && (
@@ -421,7 +421,7 @@ export default function AgentManagement() {
                               className="fixed inset-0 z-10"
                               onClick={() => setActionMenuOpen(null)}
                             />
-                            <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-20 py-1">
+                            <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-30 py-1 animate-in fade-in slide-in-from-top-1">
                               <Link
                                 href={`/agen/${agent.id}`}
                                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
