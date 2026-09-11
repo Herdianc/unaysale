@@ -1,3 +1,7 @@
+// Data properti berubah tiap saat (tambah/hapus/publish) -> jangan prerender statis,
+// selalu baca DB fresh agar homepage tidak basi setelah deploy.
+export const dynamic = "force-dynamic"
+
 import Link from "next/link"
 import {
   Home,

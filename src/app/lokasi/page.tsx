@@ -1,3 +1,6 @@
+// Selalu baca DB fresh (lihat penjelasan di src/app/page.tsx).
+export const dynamic = "force-dynamic"
+
 import { Metadata } from "next"
 import Link from "next/link"
 import { MapPin, ChevronRight, Building } from "lucide-react"
