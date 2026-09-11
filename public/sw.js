@@ -1,4 +1,4 @@
-const CACHE_NAME = "unaysale-v1";
+const CACHE_NAME = "unaysale-v2";
 const urlsToCache = ["/", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
