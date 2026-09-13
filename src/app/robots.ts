@@ -1,5 +1,11 @@
 import { MetadataRoute } from "next"
 
+// Ikut domain aktif (custom domain / vercel.app), fallback ke unaysale.id
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXTAUTH_URL ||
+  "https://unaysale.id"
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -9,6 +15,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/dashboard/", "/api/"],
       },
     ],
-    sitemap: "https://unaysale.id/sitemap.xml",
+    sitemap: `${BASE_URL}/sitemap.xml`,
   }
 }
