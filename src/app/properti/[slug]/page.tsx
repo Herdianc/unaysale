@@ -37,8 +37,9 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const property = await prisma.property.findUnique({
-    where: { slug },
+  // Terima id maupun slug (link Preview dashboard pakai id)
+  const property = await prisma.property.findFirst({
+    where: { OR: [{ id: slug }, { slug }] },
     select: {
       title: true,
       metaTitle: true,
@@ -104,8 +105,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PropertyDetailPage({ params }: PageProps) {
   const { slug } = await params
 
-  const property = await prisma.property.findUnique({
-    where: { slug },
+  // Terima id maupun slug (link Preview dashboard pakai id)
+  const property = await prisma.property.findFirst({
+    where: { OR: [{ id: slug }, { slug }] },
     include: propertyFullInclude,
   })
 
