@@ -357,8 +357,9 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           property.agent?.user?.phone ||
           property.user?.phone
         if (!waNumber) return null
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || ""
         const message = encodeURIComponent(
-          `Halo, saya tertarik dengan properti ${property.code ? `[${property.code}] ` : ""}"${property.title}". Mohon info lebih lanjut.`
+          `Halo, saya tertarik dengan properti ${property.code ? `[${property.code}] ` : ""}"${property.title}". Mohon info lebih lanjut.\n\n${siteUrl}/properti/${property.slug}`
         )
         let cleaned = String(waNumber).replace(/[^0-9]/g, "")
         if (cleaned.startsWith("0")) cleaned = "62" + cleaned.slice(1)

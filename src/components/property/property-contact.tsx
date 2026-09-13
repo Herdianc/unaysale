@@ -26,10 +26,11 @@ function PropertyContact({ property }: PropertyContactProps) {
   const propertyTitle = property.title;
   const propertyCode = property.code ? `[${property.code}]` : "";
   const propertyPrice = formatPrice(price);
-  const propertyUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/properti/${property.slug}`
-      : "";
+  // Selalu pakai domain resmi (jangan ikut domain yg dibuka, mis. vercel.app)
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "")
+  const propertyUrl = siteUrl ? `${siteUrl}/properti/${property.slug}` : "";
 
   const whatsappMessage = `Halo, saya tertarik dengan properti ${propertyCode} "${propertyTitle}" seharga ${propertyPrice}.\n\n${propertyUrl}`;
   const whatsappNumber =
