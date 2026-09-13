@@ -1,11 +1,13 @@
 import { MetadataRoute } from "next"
 import { prisma } from "@/lib/prisma"
 
-// Ikut domain aktif (custom domain / vercel.app), fallback ke unaysale.id
-const BASE_URL =
+// Ikut domain aktif (custom domain / vercel.app), fallback ke unaysale.id.
+// Hilangkan trailing slash agar tidak jadi double-slash (//properti).
+const BASE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.NEXTAUTH_URL ||
   "https://unaysale.id"
+).replace(/\/+$/, "")
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
