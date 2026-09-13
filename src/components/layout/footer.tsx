@@ -54,7 +54,16 @@ export default function Footer() {
       <div className="container-unaysale py-12">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
+            <Link
+              href="/"
+              onClick={(e) => {
+                if (typeof window !== "undefined" && window.location.pathname === "/") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="flex items-center gap-2"
+            >
               <Building2 className="h-6 w-6 text-accent" />
               <span className="text-xl font-bold text-white">{setting.siteName}</span>
             </Link>

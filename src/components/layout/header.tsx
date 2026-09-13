@@ -71,7 +71,17 @@ export default function Header() {
       <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/"
+              onClick={(e) => {
+                // Kalau sudah di homepage, Link tidak navigasi -> gulir ke atas manual
+                if (pathname === "/") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="flex items-center gap-2 shrink-0"
+            >
               <Building2 className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold text-primary">{siteName}</span>
             </Link>
