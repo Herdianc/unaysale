@@ -1,15 +1,27 @@
 import { MetadataRoute } from "next"
+import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 
-// Ikut domain aktif (custom domain / vercel.app), fallback ke unaysale.id.
-// Hilangkan trailing slash agar tidak jadi double-slash (//properti).
-const BASE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.NEXTAUTH_URL ||
-  "https://unaysale.id"
-).replace(/\/+$/, "")
+// Domain diambil dari request yang masuk (otomatis benar di domain mana pun,
+// tanpa tergantung ENV). Fallback ke ENV lalu unaysale.id.
+async function getBaseUrl(): Promise<string> {
+  try {
+    const h = await headers()
+    const host = h.get("x-forwarded-host") || h.get("host")
+    if (host) {
+      const proto = h.get("x-forwarded-proto") || "https"
+      return `${proto}://${host}`.replace(/\/+$/, "")
+    }
+  } catch {}
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXTAUTH_URL ||
+    "https://unaysale.id"
+  ).replace(/\/+$/, "")
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const BASE_URL = await getBaseUrl()
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
