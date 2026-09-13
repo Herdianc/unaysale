@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/toast-provider";
@@ -11,6 +11,15 @@ const inter = Inter({
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
+
+// Wajib untuk responsive di HP/PWA: tanpa ini browser HP me-render
+// selebar desktop lalu mengecilkan semuanya (tampilan jadi kecil semua).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#2563eb",
+}
 
 export const metadata: Metadata = {
   title: "UNAYSALE - Temukan Properti Impian Anda",
