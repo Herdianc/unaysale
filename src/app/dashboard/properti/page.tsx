@@ -340,6 +340,52 @@ export default function MyPropertiesPage() {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
+                <div className="flex items-center gap-2 mt-2">
+                  {property.status === "ACTIVE" ? (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-orange-600 hover:bg-orange-50 border-orange-200"
+                        onClick={() => handleStatusChange(property.id, "DRAFT")}
+                        disabled={actionLoading === property.id}
+                      >
+                        <Power className="h-4 w-4 mr-1" /> Nonaktifkan
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-blue-600 hover:bg-blue-50 border-blue-200"
+                        onClick={() => handleStatusChange(property.id, "SOLD")}
+                        disabled={actionLoading === property.id}
+                      >
+                        <CheckCircle2 className="h-4 w-4 mr-1" /> Terjual
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-purple-600 hover:bg-purple-50 border-purple-200"
+                        onClick={() => handleStatusChange(property.id, "RENTED")}
+                        disabled={actionLoading === property.id}
+                      >
+                        <CheckCircle2 className="h-4 w-4 mr-1" /> Disewa
+                      </Button>
+                    </>
+                  ) : (
+                    property.status !== "SOLD" &&
+                    property.status !== "RENTED" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full text-green-600 hover:bg-green-50 border-green-200"
+                        onClick={() => handleStatusChange(property.id, "ACTIVE")}
+                        disabled={actionLoading === property.id}
+                      >
+                        <CheckCircle2 className="h-4 w-4 mr-1" /> Aktifkan
+                      </Button>
+                    )
+                  )}
+                </div>
               </div>
             ))}
           </div>
