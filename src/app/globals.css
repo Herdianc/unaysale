@@ -48,6 +48,18 @@
   }
 }
 
+html {
+  font-size: 16px;
+}
+
+/* HP: besarkan font dasar agar teks tidak terlalu kecil.
+   Semua text-* Tailwind pakai rem sehingga ikut membesar proporsional. */
+@media (max-width: 767px) {
+  html {
+    font-size: 17.5px;
+  }
+}
+
 body {
   @apply bg-background text-text font-sans antialiased;
   min-height: 100vh;
